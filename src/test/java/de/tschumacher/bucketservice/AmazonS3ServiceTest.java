@@ -19,7 +19,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -114,8 +114,7 @@ public class AmazonS3ServiceTest {
   }
 
   @Test
-  public void getFileTest() throws AmazonClientException, MalformedURLException,
-      FileNotFoundException {
+  public void getFileTest() throws AmazonClientException, IOException {
     final String key = "src/test/resources/key.jpg";
     final S3Object s3Object = new S3Object();
     final FileInputStream inputStream = new FileInputStream("src/test/resources/test.jpg");
@@ -123,7 +122,7 @@ public class AmazonS3ServiceTest {
     Mockito.when(this.amazonS3.getObject(Matchers.anyString(), Matchers.anyString())).thenReturn(
         s3Object);
 
-    final File file = this.service.getFile(key);
+    final File file = this.service.downloadFile(key);
     assertNotNull(file);
     Mockito.verify(this.amazonS3, Mockito.times(1)).getObject(Matchers.anyString(),
         Matchers.anyString());
