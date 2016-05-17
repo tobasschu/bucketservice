@@ -24,6 +24,8 @@ public interface AmazonS3Service {
 
   void uploadFile(File file, String path);
 
+  File downloadFile(String key, String path) throws FileNotFoundException, IOException;
+
   File downloadFile(String key) throws FileNotFoundException, IOException;
 
   boolean fileExists(String key);

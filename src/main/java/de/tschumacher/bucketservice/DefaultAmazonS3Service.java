@@ -93,8 +93,13 @@ public class DefaultAmazonS3Service implements AmazonS3Service {
 
   @Override
   public File downloadFile(final String key) throws FileNotFoundException, IOException {
+    return downloadFile(key, "");
+  }
+
+  @Override
+  public File downloadFile(String key, String path) throws FileNotFoundException, IOException {
     final S3Object object = this.amazonS3.getObject(this.bucket, key);
-    final File file = new File(FilePathUtils.extractFileName(key));
+    final File file = new File(path + FilePathUtils.extractFileName(key));
     IOUtils.copy(object.getObjectContent(), new FileOutputStream(file));
     return file;
   }
