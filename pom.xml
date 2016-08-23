@@ -10,11 +10,41 @@
 		<jdk.version>1.7</jdk.version>
 	</properties>
 
+	<scm>
+		<connection>scm:git:git@bitbucket.org:tobasschu/bucketservice.git</connection>
+		<tag>master</tag>
+	</scm>
+	<repositories>
+		<repository>
+			<id>maven-moovin-release-repo</id>
+			<name>Moovin Release Repository</name>
+			<url>s3://repos.moovin.de/releases</url>
+		</repository>
+		<repository>
+			<id>maven-moovin-snapshot-repo</id>
+			<name>Moovin Snapshot Repository</name>
+			<url>s3://repos.moovin.de/snapshots</url>
+		</repository>
+	</repositories>
+
+	<distributionManagement>
+		<repository>
+			<id>maven-moovin-release-repo</id>
+			<name>Moovin Release Repository</name>
+			<url>s3://repos.moovin.de/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>maven-moovin-snapshot-repo</id>
+			<name>Moovin Snapshot Repository</name>
+			<url>s3://repos.moovin.de/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+
 	<dependencies>
 		<dependency>
 			<groupId>de.tschumacher</groupId>
 			<artifactId>utils</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.amazonaws</groupId>
@@ -67,6 +97,19 @@
 					<target>1.7</target>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.5.3</version>
+			</plugin>
+
 		</plugins>
+		<extensions>
+			<extension>
+				<groupId>org.springframework.build</groupId>
+				<artifactId>aws-maven</artifactId>
+				<version>5.0.0.RELEASE</version>
+			</extension>
+		</extensions>
 	</build>
 </project>
