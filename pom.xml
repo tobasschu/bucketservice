@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.tschumacher</groupId>
 	<artifactId>bucketservice</artifactId>
-	<version>0.0.3</version>
+	<version>0.0.4-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<properties>
@@ -11,7 +11,7 @@
 
 	<scm>
 		<connection>scm:git:git@bitbucket.org:tobasschu/bucketservice.git</connection>
-		<tag>bucketservice-0.0.3</tag>
+		<tag>master</tag>
 	</scm>
 	<!-- <repositories> -->
 	<!-- <repository> -->
