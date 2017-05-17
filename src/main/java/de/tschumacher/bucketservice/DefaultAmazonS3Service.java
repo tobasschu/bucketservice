@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,14 +68,14 @@ public class DefaultAmazonS3Service implements AmazonS3Service {
   private static AmazonS3 createAmazonS3Service(final String accessKey, final String secretKey,
       Regions region) {
     final AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
-    AmazonS3 amazonS3 = new AmazonS3Client(credentials);
+    final AmazonS3 amazonS3 = new AmazonS3Client(credentials);
     amazonS3.setRegion(com.amazonaws.regions.Region.getRegion(region));
     return amazonS3;
   }
 
   @Override
   public void uploadPublicFile(File file, String key) {
-    AccessControlList access = getBucketAcl();
+    final AccessControlList access = getBucketAcl();
     access.grantPermission(GroupGrantee.AllUsers, Permission.Read);
     this.uploadFile(file, key, access);
   }
@@ -99,8 +100,17 @@ public class DefaultAmazonS3Service implements AmazonS3Service {
   @Override
   public File downloadFile(String key, String path) throws FileNotFoundException, IOException {
     final S3Object object = this.amazonS3.getObject(this.bucket, key);
-    final File file = new File(path + FilePathUtils.extractFileName(key));
+    final File file = createFile(key, path);
     IOUtils.copy(object.getObjectContent(), new FileOutputStream(file));
+    return file;
+  }
+
+
+  private File createFile(String key, String path) {
+    final File file = new File(path + FilePathUtils.extractFileName(key));
+    if (file.getParentFile() != null && !file.getParentFile().exists()) {
+      file.getParentFile().mkdirs();
+    }
     return file;
   }
 
@@ -113,38 +123,38 @@ public class DefaultAmazonS3Service implements AmazonS3Service {
 
   @Override
   public void moveFile(final String sourceKey, final String destinationKey) {
-    CopyObjectRequest copyObjectRequest =
+    final CopyObjectRequest copyObjectRequest =
         new CopyObjectRequest(this.bucket, sourceKey, this.bucket, destinationKey);
-    amazonS3.copyObject(copyObjectRequest);
+    this.amazonS3.copyObject(copyObjectRequest);
     deleteFile(sourceKey);
   }
 
   @Override
   public List<String> listDirectories(final String path) {
-    ListObjectsRequest listObjectsRequest =
+    final ListObjectsRequest listObjectsRequest =
         new ListObjectsRequest().withBucketName(this.bucket).withPrefix(path)
             .withDelimiter(DELIMITER);
-    ObjectListing objects = amazonS3.listObjects(listObjectsRequest);
+    final ObjectListing objects = this.amazonS3.listObjects(listObjectsRequest);
     return objects.getCommonPrefixes();
   }
 
   @Override
   public List<String> listFiles(final String path) {
-    ListObjectsRequest listObjectsRequest =
+    final ListObjectsRequest listObjectsRequest =
         new ListObjectsRequest().withBucketName(this.bucket).withPrefix(path).withMarker(path)
             .withDelimiter(DELIMITER);
-    ObjectListing objects = amazonS3.listObjects(listObjectsRequest);
+    final ObjectListing objects = this.amazonS3.listObjects(listObjectsRequest);
     return createFileList(objects.getObjectSummaries());
   }
 
 
 
   private List<String> createFileList(List<S3ObjectSummary> objectSummaries) {
-    List<String> fileList = new ArrayList<String>();
+    final List<String> fileList = new ArrayList<String>();
     if (objectSummaries == null)
       return fileList;
 
-    for (S3ObjectSummary summary : objectSummaries) {
+    for (final S3ObjectSummary summary : objectSummaries) {
       fileList.add(summary.getKey());
     }
     return fileList;
@@ -152,7 +162,7 @@ public class DefaultAmazonS3Service implements AmazonS3Service {
 
 
   @Override
-  public String createPresignedUrl(final String key, final int minutes) {
+  public URL createPresignedUrl(final String key, final int minutes) {
     final java.util.Date expiration = new java.util.Date();
     long msec = expiration.getTime();
     msec += 1000 * 60 * minutes;
@@ -163,14 +173,15 @@ public class DefaultAmazonS3Service implements AmazonS3Service {
     generatePresignedUrlRequest.setExpiration(expiration);
     generatePresignedUrlRequest.setMethod(HttpMethod.GET);
 
-    return this.amazonS3.generatePresignedUrl(generatePresignedUrlRequest).toString();
+    return this.amazonS3.generatePresignedUrl(generatePresignedUrlRequest);
   }
 
 
   private void uploadFile(final File file, final String key, AccessControlList access) {
     final PutObjectRequest request = new PutObjectRequest(this.bucket, key, file);
-    if (access != null)
+    if (access != null) {
       request.setAccessControlList(access);
+    }
     this.amazonS3.putObject(request);
   }
 

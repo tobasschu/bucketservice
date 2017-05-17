@@ -118,14 +118,14 @@ public class AmazonS3ServiceTest {
         this.amazonS3.generatePresignedUrl(Matchers.any(GeneratePresignedUrlRequest.class)))
         .thenReturn(new URL("http://www.test.de"));
 
-    final String url = this.service.createPresignedUrl(key, minutes);
+    final URL url = this.service.createPresignedUrl(key, minutes);
     assertNotNull(url);
     Mockito.verify(this.amazonS3, Mockito.times(1)).generatePresignedUrl(
         Matchers.any(GeneratePresignedUrlRequest.class));
   }
 
   @Test
-  public void getFileTest() throws AmazonClientException, IOException {
+  public void downloadFileTest() throws AmazonClientException, IOException {
     final String key = "src/test/resources/key.jpg";
     final S3Object s3Object = new S3Object();
     final FileInputStream inputStream = new FileInputStream("src/test/resources/test.jpg");
@@ -139,10 +139,32 @@ public class AmazonS3ServiceTest {
   }
 
   @Test
+  public void downloadFileWithDirTest() throws AmazonClientException, IOException {
+    final String key = "src/test/resources/key.jpg";
+    final S3Object s3Object = new S3Object();
+    final FileInputStream inputStream = new FileInputStream("src/test/resources/test.jpg");
+    s3Object.setObjectContent(inputStream);
+    Mockito.when(this.amazonS3.getObject(BUCKET_NAME, key)).thenReturn(s3Object);
+
+    final File file = this.service.downloadFile(key, "path/");
+    assertNotNull(file);
+    Mockito.verify(this.amazonS3, Mockito.times(1)).getObject(BUCKET_NAME, key);
+    delete(file);
+
+  }
+
+  private void delete(final File file1) {
+    file1.delete();
+    if (file1.getParentFile().list().length == 0) {
+      file1.getParentFile().delete();
+    }
+  }
+
+  @Test
   public void listFilesTest() throws AmazonClientException, IOException {
     final String key = "src/test/resources/key.jpg";
-    ObjectListing objects = new ObjectListing();
-    S3ObjectSummary s3ObjectSummary = new S3ObjectSummary();
+    final ObjectListing objects = new ObjectListing();
+    final S3ObjectSummary s3ObjectSummary = new S3ObjectSummary();
     s3ObjectSummary.setKey(key);
     objects.getObjectSummaries().add(s3ObjectSummary);
 
@@ -160,7 +182,7 @@ public class AmazonS3ServiceTest {
   @Test
   public void listDirectoriesTest() throws AmazonClientException, IOException {
     final String key = "src/test/resources/key.jpg";
-    ObjectListing objects = new ObjectListing();
+    final ObjectListing objects = new ObjectListing();
     objects.getCommonPrefixes().add(key);
 
     Mockito.when(this.amazonS3.listObjects(Matchers.any(ListObjectsRequest.class))).thenReturn(
@@ -177,8 +199,8 @@ public class AmazonS3ServiceTest {
   @Test
   public void deleteFileTest() throws AmazonClientException, IOException {
     final String key = "src/test/resources/key.jpg";
-    ObjectListing objects = new ObjectListing();
-    S3ObjectSummary s3ObjectSummary = new S3ObjectSummary();
+    final ObjectListing objects = new ObjectListing();
+    final S3ObjectSummary s3ObjectSummary = new S3ObjectSummary();
     s3ObjectSummary.setKey(key);
     objects.getObjectSummaries().add(s3ObjectSummary);
     Mockito.when(this.amazonS3.listObjects(BUCKET_NAME, key)).thenReturn(objects);
@@ -193,8 +215,8 @@ public class AmazonS3ServiceTest {
   public void moveFileTest() throws AmazonClientException, IOException {
     final String sourceKey = "src/test/resources/key.jpg";
     final String destinationKey = "src/test/dest/key.jpg";
-    ObjectListing objects = new ObjectListing();
-    S3ObjectSummary s3ObjectSummary = new S3ObjectSummary();
+    final ObjectListing objects = new ObjectListing();
+    final S3ObjectSummary s3ObjectSummary = new S3ObjectSummary();
     s3ObjectSummary.setKey(sourceKey);
     objects.getObjectSummaries().add(s3ObjectSummary);
     Mockito.when(this.amazonS3.listObjects(BUCKET_NAME, sourceKey)).thenReturn(objects);
