@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.tschumacher</groupId>
 	<artifactId>bucketservice</artifactId>
@@ -13,56 +14,56 @@
 		<connection>scm:git:git@bitbucket.org:tobasschu/bucketservice.git</connection>
 		<tag>master</tag>
 	</scm>
-	<!-- <repositories> -->
-	<!-- <repository> -->
-	<!-- <id>maven-moovin-release-repo</id> -->
-	<!-- <name>Moovin Release Repository</name> -->
-	<!-- <url>s3://repos.moovin.de/releases</url> -->
-	<!-- </repository> -->
-	<!-- <repository> -->
-	<!-- <id>maven-moovin-snapshot-repo</id> -->
-	<!-- <name>Moovin Snapshot Repository</name> -->
-	<!-- <url>s3://repos.moovin.de/snapshots</url> -->
-	<!-- </repository> -->
-	<!-- </repositories> -->
-
-	<!-- <distributionManagement> -->
-	<!-- <repository> -->
-	<!-- <id>maven-moovin-release-repo</id> -->
-	<!-- <name>Moovin Release Repository</name> -->
-	<!-- <url>s3://repos.moovin.de/releases</url> -->
-	<!-- </repository> -->
-	<!-- <snapshotRepository> -->
-	<!-- <id>maven-moovin-snapshot-repo</id> -->
-	<!-- <name>Moovin Snapshot Repository</name> -->
-	<!-- <url>s3://repos.moovin.de/snapshots</url> -->
-	<!-- </snapshotRepository> -->
-	<!-- </distributionManagement> -->
 	<repositories>
 		<repository>
-			<id>maven-closelink-release-repo</id>
-			<name>Closelink Release Repository</name>
-			<url>s3://repository.closelink.net/releases</url>
+			<id>maven-moovin-release-repo</id>
+			<name>Moovin Release Repository</name>
+			<url>s3://repos.moovin.de/releases</url>
 		</repository>
 		<repository>
-			<id>maven-closelink-snapshot-repo</id>
-			<name>Closelink Snapshot Repository</name>
-			<url>s3://repository.closelink.net/snapshots</url>
+			<id>maven-moovin-snapshot-repo</id>
+			<name>Moovin Snapshot Repository</name>
+			<url>s3://repos.moovin.de/snapshots</url>
 		</repository>
 	</repositories>
 
 	<distributionManagement>
 		<repository>
-			<id>maven-closelink-release-repo</id>
-			<name>Closelink Release Repository</name>
-			<url>s3://repository.closelink.net/releases</url>
+			<id>maven-moovin-release-repo</id>
+			<name>Moovin Release Repository</name>
+			<url>s3://repos.moovin.de/releases</url>
 		</repository>
 		<snapshotRepository>
-			<id>maven-closelink-snapshot-repo</id>
-			<name>Closelink Snapshot Repository</name>
-			<url>s3://repository.closelink.net/snapshots</url>
+			<id>maven-moovin-snapshot-repo</id>
+			<name>Moovin Snapshot Repository</name>
+			<url>s3://repos.moovin.de/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
+	<!-- <repositories> -->
+	<!-- <repository> -->
+	<!-- <id>maven-closelink-release-repo</id> -->
+	<!-- <name>Closelink Release Repository</name> -->
+	<!-- <url>s3://repository.closelink.net/releases</url> -->
+	<!-- </repository> -->
+	<!-- <repository> -->
+	<!-- <id>maven-closelink-snapshot-repo</id> -->
+	<!-- <name>Closelink Snapshot Repository</name> -->
+	<!-- <url>s3://repository.closelink.net/snapshots</url> -->
+	<!-- </repository> -->
+	<!-- </repositories> -->
+
+	<!-- <distributionManagement> -->
+	<!-- <repository> -->
+	<!-- <id>maven-closelink-release-repo</id> -->
+	<!-- <name>Closelink Release Repository</name> -->
+	<!-- <url>s3://repository.closelink.net/releases</url> -->
+	<!-- </repository> -->
+	<!-- <snapshotRepository> -->
+	<!-- <id>maven-closelink-snapshot-repo</id> -->
+	<!-- <name>Closelink Snapshot Repository</name> -->
+	<!-- <url>s3://repository.closelink.net/snapshots</url> -->
+	<!-- </snapshotRepository> -->
+	<!-- </distributionManagement> -->
 
 	<dependencies>
 		<dependency>
