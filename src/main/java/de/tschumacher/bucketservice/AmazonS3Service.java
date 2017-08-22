@@ -23,9 +23,9 @@ public interface AmazonS3Service {
 
   void uploadPublicFile(File file, String key);
 
-  void uploadFile(File file, String path);
+  void uploadFile(File file, String key);
 
-  File downloadFile(String key, String path) throws FileNotFoundException, IOException;
+  File downloadFile(String key, String localPath) throws FileNotFoundException, IOException;
 
   File downloadFile(String key) throws FileNotFoundException, IOException;
 

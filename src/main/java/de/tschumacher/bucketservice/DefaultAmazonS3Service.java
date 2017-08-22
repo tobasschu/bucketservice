@@ -1,11 +1,11 @@
 /*
  * Copyright 2015 Tobias Schumacher
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -98,9 +98,9 @@ public class DefaultAmazonS3Service implements AmazonS3Service {
   }
 
   @Override
-  public File downloadFile(String key, String path) throws FileNotFoundException, IOException {
+  public File downloadFile(String key, String localPath) throws FileNotFoundException, IOException {
     final S3Object object = this.amazonS3.getObject(this.bucket, key);
-    final File file = createFile(key, path);
+    final File file = createFile(key, localPath);
     IOUtils.copy(object.getObjectContent(), new FileOutputStream(file));
     return file;
   }
@@ -133,7 +133,7 @@ public class DefaultAmazonS3Service implements AmazonS3Service {
   public List<String> listDirectories(final String path) {
     final ListObjectsRequest listObjectsRequest =
         new ListObjectsRequest().withBucketName(this.bucket).withPrefix(path)
-            .withDelimiter(DELIMITER);
+        .withDelimiter(DELIMITER);
     final ObjectListing objects = this.amazonS3.listObjects(listObjectsRequest);
     return objects.getCommonPrefixes();
   }
@@ -142,7 +142,7 @@ public class DefaultAmazonS3Service implements AmazonS3Service {
   public List<String> listFiles(final String path) {
     final ListObjectsRequest listObjectsRequest =
         new ListObjectsRequest().withBucketName(this.bucket).withPrefix(path).withMarker(path)
-            .withDelimiter(DELIMITER);
+        .withDelimiter(DELIMITER);
     final ObjectListing objects = this.amazonS3.listObjects(listObjectsRequest);
     return createFileList(objects.getObjectSummaries());
   }

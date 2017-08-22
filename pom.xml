@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.tschumacher</groupId>
 	<artifactId>bucketservice</artifactId>
@@ -7,62 +8,24 @@
 
 	<properties>
 		<jdk.version>1.7</jdk.version>
+		<gpg.keyname>gpgkey</gpg.keyname>
 	</properties>
 
 	<scm>
-		<connection>scm:git:git@bitbucket.org:tobasschu/bucketservice.git</connection>
-		<tag>master</tag>
+		<connection>scm:git:git@github.com:tobasschu/bucketservice.git</connection>
 	</scm>
-	<repositories>
-		<repository>
-			<id>maven-moovin-release-repo</id>
-			<name>Moovin Release Repository</name>
-			<url>s3://repos.moovin.de/releases</url>
-		</repository>
-		<repository>
-			<id>maven-moovin-snapshot-repo</id>
-			<name>Moovin Snapshot Repository</name>
-			<url>s3://repos.moovin.de/snapshots</url>
-		</repository>
-	</repositories>
+
 
 	<distributionManagement>
-		<repository>
-			<id>maven-moovin-release-repo</id>
-			<name>Moovin Release Repository</name>
-			<url>s3://repos.moovin.de/releases</url>
-		</repository>
 		<snapshotRepository>
-			<id>maven-moovin-snapshot-repo</id>
-			<name>Moovin Snapshot Repository</name>
-			<url>s3://repos.moovin.de/snapshots</url>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 		</snapshotRepository>
+		<repository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
 	</distributionManagement>
-	<!-- <repositories> -->
-	<!-- <repository> -->
-	<!-- <id>maven-closelink-release-repo</id> -->
-	<!-- <name>Closelink Release Repository</name> -->
-	<!-- <url>s3://repository.closelink.net/releases</url> -->
-	<!-- </repository> -->
-	<!-- <repository> -->
-	<!-- <id>maven-closelink-snapshot-repo</id> -->
-	<!-- <name>Closelink Snapshot Repository</name> -->
-	<!-- <url>s3://repository.closelink.net/snapshots</url> -->
-	<!-- </repository> -->
-	<!-- </repositories> -->
-
-	<!-- <distributionManagement> -->
-	<!-- <repository> -->
-	<!-- <id>maven-closelink-release-repo</id> -->
-	<!-- <name>Closelink Release Repository</name> -->
-	<!-- <url>s3://repository.closelink.net/releases</url> -->
-	<!-- </repository> -->
-	<!-- <snapshotRepository> -->
-	<!-- <id>maven-closelink-snapshot-repo</id> -->
-	<!-- <name>Closelink Snapshot Repository</name> -->
-	<!-- <url>s3://repository.closelink.net/snapshots</url> -->
-	<!-- </snapshotRepository> -->
-	<!-- </distributionManagement> -->
 
 	<dependencies>
 		<dependency>
@@ -130,8 +93,43 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
 				<version>2.5.3</version>
+				<configuration>
+					<mavenExecutorId>forked-path</mavenExecutorId>
+					<useReleaseProfile>false</useReleaseProfile>
+					<arguments>-Psonatype-oss-release</arguments>
+				</configuration>
 			</plugin>
-
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>1.6</version>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+						<configuration>
+							<keyname>${gpg.keyname}</keyname>
+							<passphraseServerId>${gpg.keyname}</passphraseServerId>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9.1</version>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 		<extensions>
 			<extension>
@@ -142,3 +140,4 @@
 		</extensions>
 	</build>
 </project>
+
