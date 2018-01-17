@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Tobias Schumacher
+ * Copyright 2017 Tobias Schumacher
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -11,35 +11,13 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package de.tschumacher.bucketservice;
+package de.tschumacher.bucketservice.service.upload;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URL;
-import java.util.List;
 
-public interface AmazonS3Service {
+public interface S3UploadService {
 
   void uploadPublicFile(File file, String key);
 
   void uploadFile(File file, String key);
-
-  File downloadFile(String key, String localPath) throws FileNotFoundException, IOException;
-
-  File downloadFile(String key) throws FileNotFoundException, IOException;
-
-  boolean fileExists(String key);
-
-  void deleteFile(String key);
-
-  URL createPresignedUrl(String key, int minutes);
-
-  List<String> listFiles(String path);
-
-  List<String> listDirectories(String path);
-
-  void moveFile(String sourceKey, String destinationKey);
-
-
 }
