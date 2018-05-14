@@ -46,7 +46,10 @@ public class DefaultS3DownloadService implements S3DownloadService {
   public File downloadFile(String key, String localPath) throws FileNotFoundException, IOException {
     final S3Object object = getObject(key);
     final File file = createFile(key, localPath);
-    IOUtils.copy(object.getObjectContent(), new FileOutputStream(file));
+    FileOutputStream fileOutputStream = new FileOutputStream(file);
+    IOUtils.copy(object.getObjectContent(), fileOutputStream);
+    fileOutputStream.close();
+    object.close();
     return file;
   }
 
