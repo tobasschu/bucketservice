@@ -36,7 +36,9 @@ import de.tschumacher.bucketservice.service.CommonS3ServiceTest;
 public class S3DownloadServiceTest extends CommonS3ServiceTest {
 
   private static final String TEST_FILE = "src/test/resources/test.jpg";
+
   private S3DownloadService service;
+
   private String key;
 
   @Override
@@ -59,6 +61,7 @@ public class S3DownloadServiceTest extends CommonS3ServiceTest {
 
     Mockito.verify(this.amazonS3, Mockito.times(1)).getObject(this.bucketName, this.key);
     delete(file);
+    s3Object.close();
   }
 
   @Test
@@ -74,9 +77,8 @@ public class S3DownloadServiceTest extends CommonS3ServiceTest {
 
     Mockito.verify(this.amazonS3, Mockito.times(1)).getObject(this.bucketName, this.key);
     delete(file);
+    s3Object.close();
   }
-
-
 
   @Test
   public void createPresignedUrlTest() throws AmazonClientException, MalformedURLException {
@@ -95,7 +97,6 @@ public class S3DownloadServiceTest extends CommonS3ServiceTest {
     Mockito.verify(this.amazonS3, Mockito.times(1)).generatePresignedUrl(
         Matchers.any(GeneratePresignedUrlRequest.class));
   }
-
 
   private void delete(final File file) {
     file.delete();
