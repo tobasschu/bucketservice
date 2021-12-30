@@ -23,7 +23,7 @@ import java.net.URL;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Matchers;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
 import com.amazonaws.AmazonClientException;
@@ -86,7 +86,7 @@ public class S3DownloadServiceTest extends CommonS3ServiceTest {
     final URL url = DataCreater.createURL();
 
     Mockito.when(
-        this.amazonS3.generatePresignedUrl(Matchers.any(GeneratePresignedUrlRequest.class)))
+        this.amazonS3.generatePresignedUrl(ArgumentMatchers.any(GeneratePresignedUrlRequest.class)))
         .thenReturn(url);
 
     final URL resultUrl = this.service.createPresignedUrl(this.key, minutes);
@@ -95,7 +95,7 @@ public class S3DownloadServiceTest extends CommonS3ServiceTest {
     assertEquals(url, resultUrl);
 
     Mockito.verify(this.amazonS3, Mockito.times(1)).generatePresignedUrl(
-        Matchers.any(GeneratePresignedUrlRequest.class));
+        ArgumentMatchers.any(GeneratePresignedUrlRequest.class));
   }
 
   private void delete(final File file) {

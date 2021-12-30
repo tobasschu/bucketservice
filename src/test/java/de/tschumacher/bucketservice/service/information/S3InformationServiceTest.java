@@ -28,7 +28,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Matchers;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
 import com.amazonaws.services.s3.model.ListObjectsRequest;
@@ -55,7 +55,7 @@ public class S3InformationServiceTest extends CommonS3ServiceTest {
   public void listFilesTest() {
     final ObjectListing objects = DataCreater.createObjectListing();
 
-    Mockito.when(this.amazonS3.listObjects(Matchers.any(ListObjectsRequest.class))).thenReturn(
+    Mockito.when(this.amazonS3.listObjects(ArgumentMatchers.any(ListObjectsRequest.class))).thenReturn(
         objects);
 
     final List<S3File> files = this.service.listFiles(this.key);
@@ -73,7 +73,7 @@ public class S3InformationServiceTest extends CommonS3ServiceTest {
   public void listFileNamesTest() {
     final ObjectListing objects = DataCreater.createObjectListing();
 
-    Mockito.when(this.amazonS3.listObjects(Matchers.any(ListObjectsRequest.class))).thenReturn(
+    Mockito.when(this.amazonS3.listObjects(ArgumentMatchers.any(ListObjectsRequest.class))).thenReturn(
         objects);
 
     final List<String> fileNames = this.service.listFileNames(this.key);
@@ -100,7 +100,7 @@ public class S3InformationServiceTest extends CommonS3ServiceTest {
 
     final ObjectListing objects = DataCreater.createObjectListing();
 
-    Mockito.when(this.amazonS3.listObjects(Matchers.any(ListObjectsRequest.class))).thenReturn(
+    Mockito.when(this.amazonS3.listObjects(ArgumentMatchers.any(ListObjectsRequest.class))).thenReturn(
         objects);
 
     final List<String> directories = this.service.listDirectories(this.key);
